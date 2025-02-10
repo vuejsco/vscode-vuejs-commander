@@ -1,0 +1,9 @@
+{
+	"vuejs.commander.enable": "Habilitar o deshabilitar la extensión VueJS Commander",
+	"vuejs.commander.packages.defaultPackageManager": "Administrador de paquetes predeterminado para usar al crear un nuevo proyecto",
+	"vuejs.commander.terminal.currentWorkingDirectory": "Directorio de trabajo actual para la terminal",
+	"vuejs.commander.terminal.hideFromUser": "Ocultar la terminal al usuario",
+	"vuejs.commander.createProject": "Crear nuevo proyecto",
+	"vuejs.commander.devServer": "Iniciar servidor de desarrollo",
+	"vuejs.commander.build": "Construir para producción"
+}

@@ -1,0 +1,32 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"properties": {
+		"vuejs.commander.enable": {
+			"type": "boolean",
+			"default": true,
+			"scope": "resource",
+			"description": "Enable or disable the VueJS Commander extension"
+		},
+		"vuejs.commander.packages.defaultPackageManager": {
+			"type": "string",
+			"default": "npm",
+			"enum": ["npm", "yarn", "pnpm"],
+			"enumDescriptions": ["npm", "yarn", "pnpm"],
+			"scope": "resource",
+			"description": "Default package manager to use when creating a new project"
+		},
+		"vuejs.commander.terminal.currentWorkingDirectory": {
+			"type": "string",
+			"default": "",
+			"scope": "resource",
+			"description": "Current working directory for the terminal"
+		},
+		"vuejs.commander.terminal.hideFromUser": {
+			"type": "boolean",
+			"default": false,
+			"scope": "resource",
+			"description": "Hide the terminal from the user"
+		}
+	}
+}

@@ -1,0 +1,222 @@
+{
+	"name": "vscode-vuejs-commander",
+	"displayName": "VueJS Commander",
+	"description": "VueJS Commander is a Visual Studio Code extension designed to streamline the execution of common Vue.js and Nuxt.js commands.",
+	"version": "0.0.0",
+	"icon": "icon.png",
+	"license": "MIT",
+	"publisher": "imgildev",
+	"author": "vuejsco",
+	"engines": {
+		"vscode": "^1.88.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"keywords": [
+		"cli",
+		"code generator",
+		"code",
+		"codegen",
+		"codegenerator",
+		"coding",
+		"command",
+		"commander",
+		"commands",
+		"create-nuxt-app",
+		"create-nuxt",
+		"create-nuxtjs-app",
+		"create-nuxtjs-project",
+		"create-nuxtjs",
+		"create",
+		"deploy",
+		"dev",
+		"development",
+		"extension",
+		"generator",
+		"init",
+		"javascript",
+		"js",
+		"node",
+		"nodejs",
+		"npm",
+		"nuxi",
+		"nuxt-app",
+		"nuxt.js",
+		"nuxt",
+		"nuxt",
+		"nuxtjs-app",
+		"nuxtjs-generator",
+		"nuxtjs-project",
+		"nuxtjs",
+		"nuxtjs",
+		"nuxtjsgenerator",
+		"nuxtjsproject",
+		"project",
+		"server",
+		"tool",
+		"tools",
+		"ts",
+		"typescript",
+		"vscode-extension",
+		"vscode",
+		"vue component",
+		"vue file",
+		"vue generator",
+		"vue js colombia",
+		"vue js",
+		"vue project",
+		"vue structure",
+		"vue template",
+		"vue tool",
+		"vue-ts",
+		"vue.js",
+		"vue",
+		"vuejs colombia",
+		"vuejs",
+		"vuejs",
+		"vuejsco",
+		"vuejscolombia",
+		"yarn"
+	],
+	"homepage": "https://github.com/vuejsco/vscode-vuejs-commander",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vuejsco/vscode-vuejs-commander"
+	},
+	"bugs": {
+		"url": "https://github.com/vuejsco/vscode-vuejs-commander/issues"
+	},
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"l10n": "./l10n",
+	"contributes": {
+		"configuration": {
+			"title": "VueJS Commander",
+			"properties": {
+				"vuejs.commander.enable": {
+					"type": "boolean",
+					"default": true,
+					"scope": "resource",
+					"description": "%vuejs.commander.enable%"
+				},
+				"vuejs.commander.packages.defaultPackageManager": {
+					"type": "string",
+					"default": "npm",
+					"enum": [
+						"npm",
+						"yarn",
+						"pnpm"
+					],
+					"enumDescriptions": [
+						"npm",
+						"yarn",
+						"pnpm"
+					],
+					"scope": "resource",
+					"description": "%vuejs.commander.packages.defaultPackageManager%"
+				},
+				"vuejs.commander.terminal.currentWorkingDirectory": {
+					"type": "string",
+					"default": "",
+					"scope": "resource",
+					"description": "%vuejs.commander.terminal.currentWorkingDirectory%"
+				},
+				"vuejs.commander.terminal.hideFromUser": {
+					"type": "boolean",
+					"default": false,
+					"scope": "resource",
+					"description": "%vuejs.commander.terminal.hideFromUser%"
+				}
+			}
+		},
+		"commands": [
+			{
+				"command": "vuejs.commander.createProject",
+				"title": "%vuejs.commander.createProject%",
+				"category": "VueJS Commander"
+			},
+			{
+				"command": "vuejs.commander.devServer",
+				"title": "%vuejs.commander.devServer%",
+				"category": "VueJS Commander"
+			},
+			{
+				"command": "vuejs.commander.build",
+				"title": "%vuejs.commander.build%",
+				"category": "VueJS Commander"
+			}
+		],
+		"submenus": [
+			{
+				"id": "vuejs.commander.submenu",
+				"label": "VueJS Commander"
+			}
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"submenu": "vuejs.commander.submenu",
+					"group": "2_workspace",
+					"when": "explorerViewletFocus && explorerResourceIsRoot"
+				}
+			],
+			"vuejs.commander.submenu": [
+				{
+					"command": "vuejs.commander.createProject",
+					"group": "vuejs.commander"
+				},
+				{
+					"command": "vuejs.commander.devServer",
+					"group": "vuejs.commander"
+				}
+			]
+		},
+		"jsonValidation": [
+			{
+				"fileMatch": ".vscode/settings.json",
+				"url": "./schemas/config.schema.json"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "rimraf out && tsc -p ./ && cpy src/assets/* out/assets",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
+		"format": "biome format --write",
+		"lint": "biome lint --write",
+		"lint:check": "biome check --write",
+		"test": "node ./out/test/runTest.js",
+		"compodoc": "npx compodoc -p tsconfig.doc.json -d compodoc --theme readthedocs -s",
+		"prepare": "husky",
+		"release": "release-it"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@commitlint/cli": "^19.6.1",
+		"@commitlint/config-conventional": "^19.6.0",
+		"@compodoc/compodoc": "^1.1.26",
+		"@release-it/conventional-changelog": "^10.0.0",
+		"@types/glob": "^8.1.0",
+		"@types/minimatch": "^3.0.5",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "^22.9.0",
+		"@types/vscode": "^1.88.0",
+		"@vscode/l10n-dev": "^0.0.35",
+		"@vscode/test-cli": "^0.0.10",
+		"@vscode/test-electron": "^2.4.1",
+		"autoprefixer": "^10.4.16",
+		"cpy-cli": "^5.0.0",
+		"glob": "^11.0.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^15.2.10",
+		"mocha": "^10.8.2",
+		"release-it": "^18.1.2",
+		"rimraf": "^6.0.1",
+		"typescript": "^5.7.2"
+	}
+}

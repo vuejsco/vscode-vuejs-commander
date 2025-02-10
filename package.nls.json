@@ -1,0 +1,9 @@
+{
+	"vuejs.commander.enable": "Enable or disable the VueJS Commander extension",
+	"vuejs.commander.packages.defaultPackageManager": "Default package manager to use when creating a new project",
+	"vuejs.commander.terminal.currentWorkingDirectory": "Current working directory for the terminal",
+	"vuejs.commander.terminal.hideFromUser": "Hide the terminal from the user",
+	"vuejs.commander.createProject": "Create New Project",
+	"vuejs.commander.devServer": "Start Development Server",
+	"vuejs.commander.build": "Build for Production"
+}
