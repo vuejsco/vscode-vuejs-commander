@@ -2,7 +2,7 @@
 	"name": "vscode-vuejs-commander",
 	"displayName": "VueJS Commander",
 	"description": "VueJS Commander is a Visual Studio Code extension designed to streamline the execution of common Vue.js and Nuxt.js commands.",
-	"version": "1.1.0",
+	"version": "1.0.0",
 	"icon": "icon.png",
 	"license": "MIT",
 	"publisher": "imgildev",
