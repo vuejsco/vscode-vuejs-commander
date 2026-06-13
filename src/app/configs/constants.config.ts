@@ -8,7 +8,7 @@
  *
  * @returns {string} - The unique identifier of the extension
  */
-export const EXTENSION_ID: string = 'vuejs.commander'
+export const EXTENSION_ID: string = 'vuejs.commander';
 
 /**
  * EXTENSION_NAME: The name of the extension.
@@ -20,7 +20,7 @@ export const EXTENSION_ID: string = 'vuejs.commander'
  *
  * @returns {string} - The name of the extension
  */
-export const EXTENSION_NAME: string = 'vscode-vuejs-commander'
+export const EXTENSION_NAME: string = 'vscode-vuejs-commander';
 
 /**
  * EXTENSION_DISPLAY_NAME: The name of the extension.
@@ -32,7 +32,7 @@ export const EXTENSION_NAME: string = 'vscode-vuejs-commander'
  *
  * @returns {string} - The name of the extension
  */
-export const EXTENSION_DISPLAY_NAME: string = 'VueJS Commander'
+export const EXTENSION_DISPLAY_NAME: string = 'VueJS Commander';
 
 /**
  * USER_NAME: The githubUsername of the extension.
@@ -44,7 +44,7 @@ export const EXTENSION_DISPLAY_NAME: string = 'VueJS Commander'
  *
  * @returns {string} - The githubUsername of the extension
  */
-export const USER_NAME: string = 'ManuelGil'
+export const USER_NAME: string = 'ManuelGil';
 
 /**
  * USER_PUBLISHER: The publisher of the extension.
@@ -56,7 +56,7 @@ export const USER_NAME: string = 'ManuelGil'
  *
  * @returns {string} - The publisher of the extension
  */
-export const USER_PUBLISHER: string = 'imgildev'
+export const USER_PUBLISHER: string = 'imgildev';
 
 /**
  * EXTENSION_REPOSITORY_URL: The repository URL of the extension.
@@ -68,7 +68,7 @@ export const USER_PUBLISHER: string = 'imgildev'
  *
  * @returns {string} - The repository URL of the extension
  */
-export const EXTENSION_REPOSITORY_URL: string = `https://github.com/${USER_NAME}/${EXTENSION_NAME}`
+export const EXTENSION_REPOSITORY_URL: string = `https://github.com/${USER_NAME}/${EXTENSION_NAME}`;
 
 /**
  * EXTENSION_MARKETPLACE_URL: The marketplace URL of the extension.
@@ -80,7 +80,7 @@ export const EXTENSION_REPOSITORY_URL: string = `https://github.com/${USER_NAME}
  *
  * @returns {string} - The marketplace URL of the extension
  */
-export const EXTENSION_MARKETPLACE_URL: string = `https://marketplace.visualstudio.com/items?itemName=${USER_PUBLISHER}.${EXTENSION_NAME}`
+export const EXTENSION_MARKETPLACE_URL: string = `https://marketplace.visualstudio.com/items?itemName=${USER_PUBLISHER}.${EXTENSION_NAME}`;
 
 /**
  * EXTENSION_BUGS_URL: The bugs URL of the extension.
@@ -92,7 +92,7 @@ export const EXTENSION_MARKETPLACE_URL: string = `https://marketplace.visualstud
  *
  * @returns {string} - The bugs URL of the extension
  */
-export const EXTENSION_BUGS_URL: string = `${EXTENSION_REPOSITORY_URL}/issues`
+export const EXTENSION_BUGS_URL: string = `${EXTENSION_REPOSITORY_URL}/issues`;
 
 /**
  * EXTENSION_SOCIAL_MEDIA_URL: The social media URL of the extension.
@@ -104,7 +104,8 @@ export const EXTENSION_BUGS_URL: string = `${EXTENSION_REPOSITORY_URL}/issues`
  *
  * @returns {string} - The social media URL of the extension
  */
-export const EXTENSION_SOCIAL_MEDIA_URL: string = 'https://github.com/ManuelGil'
+export const EXTENSION_SOCIAL_MEDIA_URL: string =
+  'https://github.com/ManuelGil';
 
 /**
  * EXTENSION_SPONSOR_URL: The sponsor URL of the extension.
@@ -117,7 +118,7 @@ export const EXTENSION_SOCIAL_MEDIA_URL: string = 'https://github.com/ManuelGil'
  * @returns {string} - The sponsor URL of the extension
  */
 export const EXTENSION_SPONSOR_URL: string =
-  'https://github.com/sponsors/ManuelGil'
+  'https://github.com/sponsors/ManuelGil';
 
 /**
  * EXTENSION_PAYPAL_URL: The PayPal URL of the extension.
@@ -130,7 +131,7 @@ export const EXTENSION_SPONSOR_URL: string =
  * @returns {string} - The PayPal URL of the extension
  */
 export const EXTENSION_PAYPAL_URL: string =
-  'https://www.paypal.com/paypalme/ManuelFGil'
+  'https://www.paypal.com/paypalme/ManuelFGil';
 
 /**
  * ENABLE: The flag to enable the extension.
@@ -142,4 +143,4 @@ export const EXTENSION_PAYPAL_URL: string =
  *
  * @returns {boolean} - The flag to enable the extension
  */
-export const ENABLE: boolean = true
+export const ENABLE: boolean = true;

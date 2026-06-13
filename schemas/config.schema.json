@@ -20,7 +20,7 @@
 			"type": "string",
 			"default": "",
 			"scope": "resource",
-			"description": "Current working directory for the terminal"
+			"description": "Optional absolute path override for the terminal working directory. When unset, commands run in the selected workspace folder."
 		},
 		"vuejs.commander.terminal.hideFromUser": {
 			"type": "boolean",

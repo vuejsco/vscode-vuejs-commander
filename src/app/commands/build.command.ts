@@ -1,4 +1,5 @@
 import { BaseCommand } from './base.command';
+import type { Uri } from 'vscode';
 
 /**
  * The BuildCommand class.
@@ -26,7 +27,7 @@ export class BuildCommand extends BaseCommand {
    * @public
    * @memberof BuildCommand
    */
-  async execute(): Promise<void> {
-    this.service.buildProject();
+  async execute(targetFolder?: Uri): Promise<void> {
+    this.service.buildProject(targetFolder);
   }
 }

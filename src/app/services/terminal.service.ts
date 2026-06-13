@@ -45,8 +45,9 @@ export class TerminalService {
    *
    * @returns {Promise<void>} The promise that resolves when the command is executed.
    */
-  public async createProject(): Promise<void> {
-    const createProjectVueCommands: PackageManagerAction[] = [
+  public async createProject(targetFolder?: Uri): Promise<void> {
+    // Vue 3 con Vite (moderno)
+    const createProjectVue3Commands: PackageManagerAction[] = [
       {
         type: 'npm',
         command: 'npm create vite@latest . -- --template vue',
@@ -61,6 +62,23 @@ export class TerminalService {
       },
     ];
 
+    // Vue 2 con CLI (legacy pero aún usado en proyectos existentes)
+    const createProjectVue2Commands: PackageManagerAction[] = [
+      {
+        type: 'npm',
+        command: 'npm init vue@legacy .',
+      },
+      {
+        type: 'yarn',
+        command: 'yarn create vue@legacy .',
+      },
+      {
+        type: 'pnpm',
+        command: 'pnpm create vue@legacy .',
+      },
+    ];
+
+    // Nuxt
     const createProjectNuxtCommands: PackageManagerAction[] = [
       {
         type: 'npm',
@@ -76,7 +94,8 @@ export class TerminalService {
       },
     ];
 
-    const projectType = await window.showQuickPick(['Vue', 'Nuxt'], {
+    // Solicitar el tipo de proyecto
+    const projectType = await window.showQuickPick(['Vue 3', 'Vue 2', 'Nuxt'], {
       placeHolder: l10n.t('Select the type of project to create'),
     });
 
@@ -87,12 +106,16 @@ export class TerminalService {
     }
 
     switch (projectType) {
-      case 'Vue':
-        await this.executeCommand(createProjectVueCommands);
+      case 'Vue 3':
+        await this.executeCommand(createProjectVue3Commands, targetFolder);
+        break;
+
+      case 'Vue 2':
+        await this.executeCommand(createProjectVue2Commands, targetFolder);
         break;
 
       case 'Nuxt':
-        await this.executeCommand(createProjectNuxtCommands);
+        await this.executeCommand(createProjectNuxtCommands, targetFolder);
         break;
 
       default:
@@ -105,7 +128,7 @@ export class TerminalService {
    *
    * @returns {Promise<void>} The promise that resolves when the command is executed
    */
-  public async startServer(): Promise<void> {
+  public async startServer(targetFolder?: Uri): Promise<void> {
     const startDevServerCommands: PackageManagerAction[] = [
       {
         type: 'npm',
@@ -121,7 +144,7 @@ export class TerminalService {
       },
     ];
 
-    await this.executeCommand(startDevServerCommands);
+    await this.executeCommand(startDevServerCommands, targetFolder);
   }
 
   /**
@@ -129,7 +152,7 @@ export class TerminalService {
    *
    * @returns {Promise<void>} The promise that resolves when the command is executed
    */
-  public async buildProject(): Promise<void> {
+  public async buildProject(targetFolder?: Uri): Promise<void> {
     // Define the build commands
     const buildCommands: PackageManagerAction[] = [
       {
@@ -147,7 +170,7 @@ export class TerminalService {
     ];
 
     // Execute the build command
-    await this.executeCommand(buildCommands);
+    await this.executeCommand(buildCommands, targetFolder);
   }
 
   // Private methods
@@ -162,45 +185,53 @@ export class TerminalService {
    */
   private async executeCommand(
     packageManagerActions: PackageManagerAction[],
+    targetFolder?: Uri,
   ): Promise<void> {
-    const { defaultPackageManager } = this.config;
+    try {
+      const { defaultPackageManager } = this.config;
 
-    const availablePackageManagers = packageManagerActions.map(
-      (manager) => manager.type,
-    );
-
-    let selectedPackageManager;
-
-    if (!availablePackageManagers.includes(defaultPackageManager)) {
-      selectedPackageManager = await window.showQuickPick(
-        availablePackageManagers,
-        {
-          placeHolder: l10n.t(
-            'Select the package manager to run the command with',
-          ),
-        },
+      const availablePackageManagers = packageManagerActions.map(
+        (manager) => manager.type,
       );
 
-      if (!selectedPackageManager) {
-        const message = l10n.t('No package manager selected');
+      let selectedPackageManager;
+
+      if (!availablePackageManagers.includes(defaultPackageManager)) {
+        selectedPackageManager = await window.showQuickPick(
+          availablePackageManagers,
+          {
+            placeHolder: l10n.t(
+              'Select the package manager to run the command with',
+            ),
+          },
+        );
+
+        if (!selectedPackageManager) {
+          const message = l10n.t('No package manager selected');
+          window.showErrorMessage(message);
+          return;
+        }
+      } else {
+        selectedPackageManager = defaultPackageManager;
+      }
+
+      const selectedInstallationManager = packageManagerActions.find(
+        (manager) => manager.type === selectedPackageManager,
+      );
+
+      if (!selectedInstallationManager) {
+        const message = l10n.t('The selected package manager is not supported');
         window.showErrorMessage(message);
         return;
       }
-    } else {
-      selectedPackageManager = defaultPackageManager;
-    }
 
-    const selectedInstallationManager = packageManagerActions.find(
-      (manager) => manager.type === selectedPackageManager,
-    );
-
-    if (!selectedInstallationManager) {
-      const message = l10n.t('The selected package manager is not supported');
+      this.openTerminalAndRun(selectedInstallationManager.command, targetFolder);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      const message = l10n.t('Error executing command: {0}', errorMessage);
       window.showErrorMessage(message);
-      return;
     }
-
-    this.openTerminalAndRun(selectedInstallationManager.command);
   }
 
   /**
@@ -212,25 +243,74 @@ export class TerminalService {
    *
    * @returns {void}
    */
-  private openTerminalAndRun(command: string): void {
-    const { currentWorkingDirectory, hideFromUser } = this.config;
+  private resolveTerminalCwd(targetFolder?: Uri): Uri | undefined {
+    if (targetFolder) {
+      const explorerFolder = workspace.getWorkspaceFolder(targetFolder);
 
-    let cwd: Uri | undefined;
-
-    if (
-      currentWorkingDirectory &&
-      workspace.getWorkspaceFolder(Uri.file(currentWorkingDirectory))
-    ) {
-      cwd = Uri.file(currentWorkingDirectory);
+      if (explorerFolder) {
+        return explorerFolder.uri;
+      }
     }
 
-    const terminal = window.createTerminal({
-      cwd,
-      hideFromUser,
-    });
+    const { currentWorkingDirectory, workspaceSelection } = this.config;
 
-    terminal.show();
+    if (currentWorkingDirectory) {
+      const configuredFolder = workspace.getWorkspaceFolder(
+        Uri.file(currentWorkingDirectory),
+      );
 
-    terminal.sendText(command);
+      if (configuredFolder) {
+        return configuredFolder.uri;
+      }
+
+      const message = l10n.t(
+        'The specified working directory does not exist or is not accessible: {0}. Using the selected workspace folder instead.',
+        currentWorkingDirectory,
+      );
+      window.showWarningMessage(message);
+    }
+
+    if (workspaceSelection) {
+      const selectedFolder = workspace.getWorkspaceFolder(
+        Uri.file(workspaceSelection),
+      );
+
+      if (selectedFolder) {
+        return selectedFolder.uri;
+      }
+    }
+
+    return undefined;
+  }
+
+  private openTerminalAndRun(command: string, targetFolder?: Uri): void {
+    try {
+      const { hideFromUser } = this.config;
+      const cwd = this.resolveTerminalCwd(targetFolder);
+
+      // Crear y mostrar la terminal
+      const terminal = window.createTerminal({
+        name: 'VueJS Commander',
+        cwd,
+        hideFromUser,
+      });
+
+      terminal.show();
+
+      // Informar al usuario qué comando se va a ejecutar
+      const infoMessage = l10n.t('Running: {0}', command);
+      window.showInformationMessage(infoMessage);
+
+      // Enviar el comando a la terminal
+      terminal.sendText(command);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      const message = l10n.t(
+        'Error executing terminal command: {0}',
+        errorMessage,
+      );
+      window.showErrorMessage(message);
+    }
   }
 }

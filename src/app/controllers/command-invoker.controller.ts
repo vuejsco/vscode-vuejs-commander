@@ -1,4 +1,4 @@
-import { l10n, window } from 'vscode';
+import { Uri, l10n, window } from 'vscode';
 
 import { EXTENSION_DISPLAY_NAME } from '../configs';
 import type { Command } from '../types';
@@ -72,11 +72,11 @@ export class CommandInvoker {
    *
    * @returns {Promise<void>}
    */
-  async execute(commandName: string): Promise<void> {
+  async execute(commandName: string, targetFolder?: Uri): Promise<void> {
     if (!this.isEnable) {
       const message = l10n.t(
         '{0} is disabled in settings. Enable it to use its features',
-        [EXTENSION_DISPLAY_NAME],
+        EXTENSION_DISPLAY_NAME,
       );
       window.showErrorMessage(message);
       return;
@@ -84,7 +84,7 @@ export class CommandInvoker {
 
     const command = this.commands.get(commandName);
     if (command) {
-      await command.execute();
+      await command.execute(targetFolder);
     }
   }
 }

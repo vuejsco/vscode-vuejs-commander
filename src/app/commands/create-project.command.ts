@@ -1,4 +1,5 @@
 import { BaseCommand } from './base.command';
+import type { Uri } from 'vscode';
 
 /**
  * The CreateProjectCommand class.
@@ -26,7 +27,7 @@ export class CreateProjectCommand extends BaseCommand {
    * @public
    * @memberof CreateProjectCommand
    */
-  async execute(): Promise<void> {
-    this.service.createProject();
+  async execute(targetFolder?: Uri): Promise<void> {
+    this.service.createProject(targetFolder);
   }
 }

@@ -1,3 +1,5 @@
+import type { Uri } from 'vscode';
+
 /**
  * The Command interface.
  *
@@ -13,5 +15,5 @@
  * }
  */
 export interface Command {
-  execute(): Promise<void>;
+  execute(targetFolder?: Uri): Promise<void>;
 }

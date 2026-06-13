@@ -1,3 +1,5 @@
+import type { Uri } from 'vscode';
+
 import { ExtensionConfig } from '../configs';
 import { TerminalService } from '../services';
 import type { Command } from '../types';
@@ -65,5 +67,5 @@ export abstract class BaseCommand implements Command {
    *
    * @returns {Promise<void>}
    */
-  abstract execute(): Promise<void>;
+  abstract execute(targetFolder?: Uri): Promise<void>;
 }

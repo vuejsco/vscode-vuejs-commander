@@ -1,4 +1,5 @@
 import { BaseCommand } from './base.command';
+import type { Uri } from 'vscode';
 
 /**
  * The DevServerCommand class.
@@ -26,7 +27,7 @@ export class DevServerCommand extends BaseCommand {
    * @public
    * @memberof DevServerCommand
    */
-  async execute(): Promise<void> {
-    this.service.startServer();
+  async execute(targetFolder?: Uri): Promise<void> {
+    this.service.startServer(targetFolder);
   }
 }

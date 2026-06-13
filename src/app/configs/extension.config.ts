@@ -1,4 +1,4 @@
-import { WorkspaceConfiguration, workspace } from 'vscode';
+import { WorkspaceConfiguration } from 'vscode';
 
 import { ENABLE } from './constants.config';
 
@@ -35,6 +35,17 @@ export class ExtensionConfig {
    * console.log(config.enable);
    */
   enable: boolean;
+
+  /**
+   * The workspace selection.
+   * @type {string | undefined}
+   * @public
+   * @memberof ExtensionConfig
+   * @example
+   * const config = new Config(workspace.getConfiguration());
+   * console.log(config.workspaceSelection);
+   */
+  workspaceSelection: string | undefined;
 
   /**
    * The default package manager.
@@ -87,10 +98,11 @@ export class ExtensionConfig {
       'packages.defaultPackageManager',
       'npm',
     );
-    this.currentWorkingDirectory = config.get<string | undefined>(
+    const configuredWorkingDirectory = config.get<string>(
       'terminal.currentWorkingDirectory',
-      workspace.workspaceFolders?.[0].uri.fsPath,
+      '',
     );
+    this.currentWorkingDirectory = configuredWorkingDirectory || undefined;
     this.hideFromUser = config.get<boolean>('terminal.hideFromUser', false);
   }
 
@@ -116,10 +128,12 @@ export class ExtensionConfig {
       'packages.defaultPackageManager',
       this.defaultPackageManager,
     );
-    this.currentWorkingDirectory = config.get<string | undefined>(
+    const configuredWorkingDirectory = config.get<string>(
       'terminal.currentWorkingDirectory',
-      this.currentWorkingDirectory,
+      '',
     );
+    this.currentWorkingDirectory =
+      configuredWorkingDirectory || this.currentWorkingDirectory;
     this.hideFromUser = config.get<boolean>(
       'terminal.hideFromUser',
       this.hideFromUser,
