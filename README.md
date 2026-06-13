@@ -49,10 +49,11 @@ Copy the following configuration into your `.vscode/settings.json` file:
 {
     "vuejs.commander.enable": true,
     "vuejs.commander.packages.defaultPackageManager": "npm",
-    "vuejs.commander.terminal.currentWorkingDirectory": "/path/to/your/project", // MUST BE an absolute path
-    "vuejs.commander.terminal.hideFromUser": false,
+    "vuejs.commander.terminal.hideFromUser": false
 }
 ```
+
+Commands run in the selected workspace folder by default. Set `vuejs.commander.terminal.currentWorkingDirectory` only when you need to override that folder with an explicit absolute path.
 
 ### Step 3: Restart VS Code
 
@@ -64,7 +65,7 @@ You can customize **VueJS Commander** by modifying its settings in `.vscode/sett
 
 - `vuejs.commander.enable`: Enable or disable the extension.
 - `vuejs.commander.packages.defaultPackageManager`: Set the default package manager for the project. Options are `npm`, `yarn` or `pnpm` (default: `"npm"`).
-- `vuejs.commander.terminal.currentWorkingDirectory`: Set the current working directory for the terminal. This must be an absolute path (default: `"/path/to/your/project"`).
+- `vuejs.commander.terminal.currentWorkingDirectory`: Optional override for the terminal working directory. When unset, commands run in the selected workspace folder. Must be an absolute path when set.
 - `vuejs.commander.terminal.hideFromUser`: Hide the terminal from the user. If set to `true`, the terminal will run in the background (default: `false`).
 
 ## Commands
@@ -74,6 +75,8 @@ You can customize **VueJS Commander** by modifying its settings in `.vscode/sett
 | `Create New Project`                     | Create a new Vue/Nuxt project      |
 | `Start Development Server`               | Start the development server       |
 | `Build for Production`                   | Build the project for production   |
+
+All commands are available from the Command Palette and from the **VueJS Commander** submenu in the Explorer context menu on workspace root folders. In multi-root workspaces, Command Palette commands reuse the selected workspace folder, while Explorer commands run in the targeted folder.
 
 ## Community
 
