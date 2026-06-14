@@ -1,5 +1,5 @@
-import { BaseCommand } from './base.command';
 import type { Uri } from 'vscode';
+import { BaseCommand } from './base.command';
 
 /**
  * The BuildCommand class.

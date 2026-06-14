@@ -225,7 +225,10 @@ export class TerminalService {
         return;
       }
 
-      this.openTerminalAndRun(selectedInstallationManager.command, targetFolder);
+      this.openTerminalAndRun(
+        selectedInstallationManager.command,
+        targetFolder,
+      );
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);

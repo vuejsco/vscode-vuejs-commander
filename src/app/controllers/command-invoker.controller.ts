@@ -1,4 +1,4 @@
-import { Uri, l10n, window } from 'vscode';
+import { l10n, Uri, window } from 'vscode';
 
 import { EXTENSION_DISPLAY_NAME } from '../configs';
 import type { Command } from '../types';

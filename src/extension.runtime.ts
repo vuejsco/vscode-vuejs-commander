@@ -10,7 +10,6 @@ import {
   WorkspaceFolder,
   window,
   workspace,
-  Command,
 } from 'vscode';
 import { VSCodeMarketplaceClient } from 'vscode-marketplace-client';
 

@@ -1,49 +1,108 @@
-const fs = require('node:fs');
-const path = require('node:path');
+#!/usr/bin/env node
+const fs = require("fs");
+const path = require("path");
+const fg = require("fast-glob");
 
-const packageJsonPath = path.join(__dirname, '..', 'package.json');
-const nlsPath = path.join(__dirname, '..', 'package.nls.json');
-const nlsEsPath = path.join(__dirname, '..', 'package.nls.es.json');
+const root = process.cwd();
+const PKG_PATH = path.join(root, "package.json");
 
-const packageJson = fs.readFileSync(packageJsonPath, 'utf8');
-const nls = JSON.parse(fs.readFileSync(nlsPath, 'utf8'));
-const nlsEs = JSON.parse(fs.readFileSync(nlsEsPath, 'utf8'));
-
-const referencedKeys = new Set(
-  [...packageJson.matchAll(/%([^%]+)%/g)].map((match) => match[1]),
-);
-
-const nlsKeys = new Set(Object.keys(nls));
-const nlsEsKeys = new Set(Object.keys(nlsEs));
-
-const missingInNls = [...referencedKeys].filter((key) => !nlsKeys.has(key));
-const missingInNlsEs = [...referencedKeys].filter((key) => !nlsEsKeys.has(key));
-const extraInNls = [...nlsKeys].filter((key) => !referencedKeys.has(key));
-const extraInNlsEs = [...nlsEsKeys].filter((key) => !referencedKeys.has(key));
-const mismatchedEsKeys = [...nlsKeys].filter((key) => !nlsEsKeys.has(key));
-
-let hasErrors = false;
-
-function report(title, keys) {
-  if (keys.length === 0) {
-    return;
-  }
-
-  hasErrors = true;
-  console.error(title);
-  for (const key of keys.sort()) {
-    console.error(`  - ${key}`);
+function readJson(p) {
+  try {
+    return JSON.parse(fs.readFileSync(p, "utf8"));
+  } catch (err) {
+    console.error("Failed to read JSON:", p, err?.message || err);
+    process.exit(2);
   }
 }
 
-report('Missing package.nls.json keys:', missingInNls);
-report('Missing package.nls.es.json keys:', missingInNlsEs);
-report('Extra package.nls.json keys:', extraInNls);
-report('Extra package.nls.es.json keys:', extraInNlsEs);
-report('Keys missing from package.nls.es.json:', mismatchedEsKeys);
+/** Collect all %...% placeholders from package.json values (recursively) */
+function collectUsedNlsKeysFromPackage(pkg) {
+  const keys = new Set();
+  const rx = /%([^%\n\r]+)%/g;
 
-if (hasErrors) {
-  process.exit(1);
+  function visit(node) {
+    if (node == null) return;
+    const t = typeof node;
+    if (t === "string") {
+      let m;
+      while ((m = rx.exec(node)) !== null) {
+        const key = m[1].trim();
+        if (key) keys.add(key);
+      }
+      return;
+    }
+    if (Array.isArray(node)) {
+      for (const it of node) visit(it);
+      return;
+    }
+    if (t === "object") {
+      for (const k of Object.keys(node)) visit(node[k]);
+    }
+  }
+
+  visit(pkg);
+  return keys;
 }
 
-console.log(`nls check passed (${referencedKeys.size} keys).`);
+/** Load all package.nls*.json files and return map: filename -> { keys: Set<string>, json } */
+function loadNlsBundles() {
+  const patterns = ["package.nls.json", "package.nls.*.json"];
+  const files = fg.sync(patterns, { cwd: root, absolute: true });
+  if (!files.length) {
+    console.error("No package.nls*.json files found.");
+    process.exit(2);
+  }
+  const bundles = new Map();
+  for (const p of files) {
+    const json = readJson(p);
+    bundles.set(p, { json, keys: new Set(Object.keys(json)) });
+  }
+  return bundles;
+}
+
+function main() {
+  const pkg = readJson(PKG_PATH);
+  const usedKeys = collectUsedNlsKeysFromPackage(pkg);
+  const bundles = loadNlsBundles();
+
+  let hasMissing = false;
+  console.log("NLS audit (package.nls):");
+  console.log(`- Used NLS keys discovered in package.json: ${usedKeys.size}`);
+
+  for (const [bundlePath, { keys }] of bundles) {
+    const missing = [];
+    for (const k of usedKeys) if (!keys.has(k)) missing.push(k);
+
+    const unused = [];
+    for (const k of keys) if (!usedKeys.has(k)) unused.push(k);
+
+    const rel = path.relative(root, bundlePath);
+    console.log(`\nBundle: ${rel}`);
+    console.log(`  - Keys in bundle: ${keys.size}`);
+    console.log(`  - Missing keys: ${missing.length}`);
+    if (missing.length) {
+      hasMissing = true;
+      for (const k of missing.sort()) console.log(`    • ${k}`);
+    }
+    console.log(`  - Unused keys: ${unused.length}`);
+    if (unused.length) {
+      const preview = unused.sort().slice(0, 20);
+      for (const k of preview) console.log(`    • ${k}`);
+      if (unused.length > preview.length)
+        console.log(`    • ...and ${unused.length - preview.length} more`);
+    }
+  }
+
+  if (hasMissing) {
+    console.error(
+      "\nResult: Missing NLS keys found. Please add them to all package.nls*.json files.",
+    );
+    process.exit(1);
+  } else {
+    console.log(
+      "\nResult: All used NLS keys are present in package.nls bundles.",
+    );
+  }
+}
+
+main();
