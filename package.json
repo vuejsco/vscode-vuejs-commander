@@ -216,17 +216,17 @@
 		"release": "release-it"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.5.0",
+		"@biomejs/biome": "^2.5.1",
 		"@commitlint/cli": "^19.8.1",
 		"@commitlint/config-conventional": "^19.8.1",
 		"@release-it/conventional-changelog": "^10.0.6",
 		"@types/mocha": "^10.0.10",
-		"@types/node": "^22.19.21",
+		"@types/node": "^22.20.0",
 		"@types/vscode": "^1.102.0",
 		"@vscode/l10n-dev": "^0.0.35",
-		"@vscode/test-cli": "^0.0.12",
+		"@vscode/test-cli": "^0.0.15",
 		"@vscode/test-electron": "^2.5.2",
-		"autoprefixer": "^10.5.0",
+		"autoprefixer": "^10.5.2",
 		"cpy-cli": "^5.0.0",
 		"esbuild": "^0.28.1",
 		"glob": "^11.1.0",
@@ -238,7 +238,7 @@
 		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"vscode-marketplace-client": "^1.2.3"
+		"vscode-marketplace-client": "^1.2.4"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
